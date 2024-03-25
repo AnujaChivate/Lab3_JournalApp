@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/valTen"
+    android:layout_marginTop="@dimen/valFive"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/journal_item_background"
+        android:minHeight="@dimen/valForty"
+        android:padding="@dimen/valTen"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewJournalText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/valEight"
+            android:layout_marginBottom="@dimen/valEight"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewJournalDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+
+            <ImageButton
+                android:id="@+id/ellipsisButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/journalOptions"
+                android:onClick="showContextMenu"
+                android:padding="@dimen/valEight"
+                android:background="@null"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                app:tint="@android:color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

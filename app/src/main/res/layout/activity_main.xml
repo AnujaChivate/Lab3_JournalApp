@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_journal"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:id="@+id/journalListScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="@id/addJournalCoordinatorLayout"
+        app:layout_constraintBottom_toBottomOf="@id/addJournalCoordinatorLayout"
+        app:layout_constraintLeft_toLeftOf="@id/addJournalCoordinatorLayout"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="@dimen/valHundred"
+        android:layout_marginStart="@dimen/valTen"
+        android:layout_marginEnd="@dimen/valTen"
+        >
+
+        <LinearLayout
+            android:id="@+id/journalList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include
+        layout="@layout/journal_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/emptyJournalLayout" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/addJournalCoordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addJournal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_marginBottom="@dimen/valTwenty"
+            android:contentDescription="@string/create_new_journal"
+            android:cropToPadding="false"
+            android:onClick="onOpenNewJournalDialog"
+            android:tintMode="multiply"
+            app:backgroundTint="@color/btnBlue"
+            app:fabSize="auto"
+            app:maxImageSize="@dimen/valSixty"
+            app:srcCompat="@android:drawable/ic_menu_add"
+            app:tint="@color/btnBlueTint" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

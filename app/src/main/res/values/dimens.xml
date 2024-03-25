@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="valHundred">100dp</dimen>
+    <dimen name="valFive">5dp</dimen>
+    <dimen name="valEight">8dp</dimen>
+    <dimen name="valTen">10dp</dimen>
+    <dimen name="valSixteen">16dp</dimen>
+    <dimen name="valTwenty">20dp</dimen>
+    <dimen name="valForty">40dp</dimen>
+    <dimen name="valFifty">50dp</dimen>
+    <dimen name="valSixty">60dp</dimen>
+    <dimen name="valSeventy">70dp</dimen>
+</resources>
