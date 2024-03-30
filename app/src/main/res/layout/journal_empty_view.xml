@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/emptyJournalLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,10 +9,10 @@
         android:id="@+id/logoImageView"
         android:layout_width="@dimen/valSeventy"
         android:layout_height="@dimen/valSeventy"
-        android:padding="@dimen/valTwenty"
-        android:layout_marginTop="280dp"
+        android:layout_marginTop="@dimen/valSeventy"
         android:background="@drawable/logo_style"
         android:contentDescription="@string/logo"
+        android:padding="@dimen/valTwenty"
         android:src="@drawable/journal"
         app:layout_constraintBottom_toTopOf="@id/emptyJournalHeader"
         app:layout_constraintEnd_toEndOf="parent"

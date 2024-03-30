@@ -1,58 +1,106 @@
 package com.zybooks.journal
 
+import JournalViewModel
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.EditText
+
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.UUID
 
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.concurrent.CopyOnWriteArrayList
+
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
+    // floating action button to add a new Journal
     private lateinit var floatingActionBtn: FloatingActionButton
 
+    // Layout to hold list of journals
     private lateinit var journalEntriesLayout: LinearLayout
 
+    // Layout for no journals (empty state)
     private lateinit var emptyJournalLayout: ConstraintLayout
     private lateinit var logoImageView: ImageView
     private lateinit var emptyJournalHeaderTextView: TextView
     private lateinit var emptyJournalSubHeader1TextView: TextView
     private lateinit var emptyJournalSubHeader2TextView: TextView
 
-    private val dialog: AddJournalDialogFragment = AddJournalDialogFragment()
+    // dialog fragment to create new journal entry
+    private lateinit var dialog: AddJournalDialogFragment
 
-    private val journalList = mutableListOf<Journal>()
+    // list to store all journals
+    private var viewModel = JournalViewModel(CopyOnWriteArrayList())
+    private val addedJournalIds = mutableListOf<Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Check if the fragment was previously retained
+        dialog = lastCustomNonConfigurationInstance as? AddJournalDialogFragment
+            ?: AddJournalDialogFragment()
+
+        // floating button to add new journal
         floatingActionBtn = findViewById(R.id.addJournal)
 
+        // layout to hold all journals in the list
         journalEntriesLayout = findViewById(R.id.journalList)
 
+        // layout to show when no journals are created
         emptyJournalLayout = findViewById(R.id.emptyJournalLayout)
+
+        // empty layout views
         logoImageView = findViewById(R.id.logoImageView)
         emptyJournalHeaderTextView = findViewById(R.id.emptyJournalHeader)
         emptyJournalSubHeader1TextView = findViewById(R.id.emptyJournalSubHeader1)
         emptyJournalSubHeader2TextView = findViewById(R.id.emptyJournalSubHeader2)
 
-        emptyJournalLayout.visibility = View.VISIBLE
-        logoImageView.visibility = View.VISIBLE
-        emptyJournalHeaderTextView.visibility = View.VISIBLE
-        emptyJournalSubHeader1TextView.visibility = View.VISIBLE
-        emptyJournalSubHeader2TextView.visibility = View.VISIBLE
+        viewModel = ViewModelProvider(this).get(JournalViewModel::class.java)
+
+        // if activity is recreated because of screen orientation change, restore saved list of journal items if any
+        viewModel.journalList.addAll(savedInstanceState?.getParcelableArrayList("journalList") ?: emptyList())
+
+        // Add each journal entry to the ViewModel's list
+        if (viewModel.journalList.isNotEmpty()) {
+            for (journalItem in viewModel.journalList) {
+                onAddNewJournal(journalItem)
+            }
+        } else {
+            // set visibility of empty view state when main activity is created
+            emptyJournalLayout.visibility = View.VISIBLE
+            logoImageView.visibility = View.VISIBLE
+            emptyJournalHeaderTextView.visibility = View.VISIBLE
+            emptyJournalSubHeader1TextView.visibility = View.VISIBLE
+            emptyJournalSubHeader2TextView.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // Reinitialize views after orientation change
+        emptyJournalLayout = findViewById(R.id.emptyJournalLayout)
+        logoImageView = findViewById(R.id.logoImageView)
+        emptyJournalHeaderTextView = findViewById(R.id.emptyJournalHeader)
+        emptyJournalSubHeader1TextView = findViewById(R.id.emptyJournalSubHeader1)
+        emptyJournalSubHeader2TextView = findViewById(R.id.emptyJournalSubHeader2)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // Save the list of journal items
+        outState.putParcelableArrayList("journalList", ArrayList(viewModel.journalList))
     }
 
     override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
@@ -70,16 +118,10 @@ class MainActivity : AppCompatActivity() {
     override fun onContextItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.deleteJournal -> {
+                // code to delete the Journal based on Id
                 val journalId = item.intent?.getIntExtra("journalId", -1) ?: -1
                 if (journalId != -1) {
-                    val iterator = journalList.iterator()
-                    while (iterator.hasNext()) {
-                        val journal = iterator.next()
-                        if (journal.id == journalId.toString()) {
-                            iterator.remove()
-                            break
-                        }
-                    }
+                    viewModel.journalList.removeAll { it.id.toInt() == journalId }
                     refreshJournalList()
                 }
                 true
@@ -88,22 +130,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        // Dismiss the fragment and remove it from the FragmentManager
+        if (isFinishing) {
+            dialog.dismiss()
+        }
+        super.onDestroy()
+    }
+
+    override fun onRetainCustomNonConfigurationInstance(): Any {
+        // Retain the fragment instance during configuration changes
+        return dialog
+    }
+
     fun onOpenNewJournalDialog(view: View) {
+        // open new journal dialog fragment
         dialog.show(supportFragmentManager, "addJournalDialog")
     }
 
     fun onCloseNewJournalDialog(view: View) {
+        // close journal dialog
         dialog.dismiss()
     }
 
-    fun onAddNewJournal(view: View, newJournal: Journal) {
-        journalList.add(newJournal)
-
+    fun onAddNewJournal(newJournal: Journal) {
+        viewModel.journalList.add(newJournal)
+        // hide the empty state layout
         emptyJournalLayout.visibility = View.GONE
-
+        // append created journal and refresh the view
         refreshJournalList()
-
-        onCloseNewJournalDialog(view)
+        dialog.dismiss()
     }
 
     fun showContextMenu(view: View) {
@@ -114,23 +170,33 @@ class MainActivity : AppCompatActivity() {
         // Clear the existing journal entries
         journalEntriesLayout.removeAllViews()
 
+        // Reset the list of added journal IDs
+        addedJournalIds.clear()
+
         // Add each journal entry to the LinearLayout
-        for (journalItem in journalList) {
-            val journalItemView = layoutInflater.inflate(R.layout.journal_item, null)
+        for (journalItem in viewModel.journalList.asReversed()) {
+            if (!addedJournalIds.contains(journalItem.id.toInt())) {
+                val journalItemView = layoutInflater.inflate(R.layout.journal_item, null)
 
-            journalItemView.id = journalItem.id.toInt()
+                journalItemView.id = journalItem.id.toInt()
 
-            val journalTextView = journalItemView.findViewById<TextView>(R.id.textViewJournalText)
-            journalTextView.text = journalItem.text
+                val journalTextView = journalItemView.findViewById<TextView>(R.id.textViewJournalText)
+                journalTextView.text = journalItem.text
 
-            val journalDateView = journalItemView.findViewById<TextView>(R.id.textViewJournalDate)
-            journalDateView.text = SimpleDateFormat("EEEE, MMM dd", Locale.getDefault()).format(journalItem.dateTime)
+                val journalDateView = journalItemView.findViewById<TextView>(R.id.textViewJournalDate)
+                journalDateView.text =
+                    SimpleDateFormat("EEEE, MMM dd", Locale.getDefault()).format(journalItem.dateTime)
 
-            registerForContextMenu(journalItemView)
-            journalEntriesLayout.addView(journalItemView)
+                registerForContextMenu(journalItemView)
+                journalEntriesLayout.addView(journalItemView)
+
+                // Add the ID of the added journal to the list
+                addedJournalIds.add(journalItem.id.toInt())
+            }
         }
 
-        if (journalList.size == 0) {
+        // If no journals available, show empty state layout
+        if (viewModel.journalList.isEmpty()) {
             emptyJournalLayout.visibility = View.VISIBLE
             logoImageView.visibility = View.VISIBLE
             emptyJournalHeaderTextView.visibility = View.VISIBLE
