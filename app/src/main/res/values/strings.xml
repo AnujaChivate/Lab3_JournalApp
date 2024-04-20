@@ -12,7 +12,7 @@
     <string name="delete_journal">Delete</string>
     <string name="journalOptions">Options</string>
     <string name="meditate_now">Meditate</string>
-    <string name="stop_meditation">Stop</string>
+    <string name="stop_meditation">Back</string>
     <string name="journal_location">Journal location</string>
     <string name="allow_location_permissions">Please allow location permissions.</string>
     <string name="finding_location">Gathering co-ordinates…</string>

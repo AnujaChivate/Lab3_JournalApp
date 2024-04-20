@@ -27,6 +27,7 @@ class MediaPlayerWorker(context: Context, workerParams: WorkerParameters) : Work
     }
 
     private fun stopMediaPlayer() {
+        mediaPlayer?.isLooping = false
         mediaPlayer?.stop()
         mediaPlayer?.release()
         mediaPlayer = null
