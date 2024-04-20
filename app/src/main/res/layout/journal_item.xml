@@ -14,13 +14,26 @@
         android:padding="@dimen/valTen"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textViewJournalText"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:orientation="vertical">
 
+            <TextView
+                android:id="@+id/textViewJournalText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewJournalLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/journalItemLocation"
+                android:textSize="14sp" />
+
+        </LinearLayout>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -39,7 +52,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
-                android:textColor="@android:color/white"
+                android:textColor="@android:color/black"
                 android:textSize="14sp" />
 
             <ImageButton
@@ -52,7 +65,7 @@
                 android:background="@null"
                 android:layout_gravity="center_vertical"
                 android:src="@drawable/ic_baseline_more_vert_24"
-                app:tint="@android:color/white" />
+                app:tint="@android:color/black" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

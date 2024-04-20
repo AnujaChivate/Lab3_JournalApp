@@ -3,20 +3,24 @@ package com.zybooks.journal
 import JournalViewModel
 import android.content.Intent
 import android.content.res.Configuration
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.CopyOnWriteArrayList
@@ -43,6 +47,11 @@ class MainActivity : AppCompatActivity() {
     private var viewModel = JournalViewModel(CopyOnWriteArrayList())
     private val addedJournalIds = mutableListOf<Int>()
 
+    // sound pool
+    private lateinit var soundEffects: SoundEffects
+
+    private lateinit var meditateButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -66,6 +75,20 @@ class MainActivity : AppCompatActivity() {
         emptyJournalSubHeader1TextView = findViewById(R.id.emptyJournalSubHeader1)
         emptyJournalSubHeader2TextView = findViewById(R.id.emptyJournalSubHeader2)
 
+        soundEffects = SoundEffects.getInstance(applicationContext)
+        meditateButton = findViewById(R.id.meditateButton)
+
+        meditateButton.setOnClickListener {
+            startActivity(Intent(this, Meditation::class.java))
+        }
+
+        // Always make sure the media player is not running meditation music
+        // on main activity
+        val workRequest = OneTimeWorkRequestBuilder<MediaPlayerWorker>()
+            .setInputData(Data.Builder().putBoolean("isPlaying", false).build())
+            .build()
+        WorkManager.getInstance(this).enqueue(workRequest)
+
         viewModel = ViewModelProvider(this).get(JournalViewModel::class.java)
 
         // if activity is recreated because of screen orientation change, restore saved list of journal items if any
@@ -84,6 +107,7 @@ class MainActivity : AppCompatActivity() {
             emptyJournalSubHeader1TextView.visibility = View.VISIBLE
             emptyJournalSubHeader2TextView.visibility = View.VISIBLE
         }
+
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -124,6 +148,7 @@ class MainActivity : AppCompatActivity() {
                     viewModel.journalList.removeAll { it.id.toInt() == journalId }
                     refreshJournalList()
                 }
+                soundEffects.playJournalDeleted()
                 true
             }
             else -> super.onContextItemSelected(item)
@@ -136,6 +161,7 @@ class MainActivity : AppCompatActivity() {
             dialog.dismiss()
         }
         super.onDestroy()
+        soundEffects.release()
     }
 
     override fun onRetainCustomNonConfigurationInstance(): Any {
@@ -160,6 +186,7 @@ class MainActivity : AppCompatActivity() {
         // append created journal and refresh the view
         refreshJournalList()
         dialog.dismiss()
+        soundEffects.playJournalCreated()
     }
 
     fun showContextMenu(view: View) {
@@ -182,6 +209,9 @@ class MainActivity : AppCompatActivity() {
 
                 val journalTextView = journalItemView.findViewById<TextView>(R.id.textViewJournalText)
                 journalTextView.text = journalItem.text
+
+                val journalTextViewLocation = journalItemView.findViewById<TextView>(R.id.textViewJournalLocation)
+                journalTextViewLocation.text = journalItem.location
 
                 val journalDateView = journalItemView.findViewById<TextView>(R.id.textViewJournalDate)
                 journalDateView.text =

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="@dimen/valForty"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,14 +10,14 @@
         android:id="@+id/logoImageView"
         android:layout_width="@dimen/valSeventy"
         android:layout_height="@dimen/valSeventy"
-        android:layout_marginTop="@dimen/valSeventy"
+        android:layout_marginTop="80dp"
         android:background="@drawable/logo_style"
         android:contentDescription="@string/logo"
         android:padding="@dimen/valTwenty"
         android:src="@drawable/journal"
         app:layout_constraintBottom_toTopOf="@id/emptyJournalHeader"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
@@ -25,13 +26,15 @@
         android:id="@+id/emptyJournalHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/valFive"
+        android:layout_marginTop="84dp"
         android:gravity="center"
         android:text="@string/start_journaling"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="25sp"
-        android:layout_margin="@dimen/valFive"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logoImageView" />
 
@@ -39,13 +42,15 @@
         android:id="@+id/emptyJournalSubHeader1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/valTen"
+        android:layout_marginTop="76dp"
         android:gravity="center"
         android:text="@string/create_your_personal_journal"
         android:textAlignment="center"
-        android:layout_margin="@dimen/valTen"
-        android:textSize="20sp"
         android:textColor="@android:color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emptyJournalHeader" />
 
@@ -53,12 +58,14 @@
         android:id="@+id/emptyJournalSubHeader2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:gravity="center"
-        android:textSize="20sp"
         android:text="@string/tap_the_plus_button_to_get_started"
         android:textAlignment="center"
         android:textColor="@android:color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emptyJournalSubHeader1" />
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="false">
+    <item android:drawable="@drawable/breathing1" android:duration="1000" />
+    <item android:drawable="@drawable/breathing2" android:duration="1000" />
+    <item android:drawable="@drawable/breathing4" android:duration="1000" />
+    <item android:drawable="@drawable/breathing3" android:duration="1000" />
+    <item android:drawable="@drawable/breathing4" android:duration="1000" />
+    <item android:drawable="@drawable/breathing5" android:duration="1000" />
+    <item android:drawable="@drawable/breathing1" android:duration="1000" />
+</animation-list>

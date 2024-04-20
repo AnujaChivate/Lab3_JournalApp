@@ -7,5 +7,10 @@
     <color name="dialogGradientStartColor">#E6A8FF</color>
     <color name="dialogGradientCenterColor">#FFD1DC</color>
     <color name="dialogGradientEndColor">#FFD1DC</color>
-    <color name="journalItemBackground">#02699B</color>
+    <color name="journalItemStartColor">#756AB6</color>
+    <color name="journalItemCenterColor">#AC87C5</color>
+    <color name="journalItemEndColor">#FFE5E5</color>
+    <color name="journalItemLocation">#0802A3</color>
+    <color name="timerStartColor">#3CA55C</color>
+    <color name="timerEndColor">#B5AC49</color>
 </resources>

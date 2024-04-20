@@ -6,17 +6,19 @@ import java.util.Date
 
 // Journal class implements Parcelable to allows instances of the class to be serialized and deserialized
 // which is necessary for saving and restoring state.
-data class Journal(val id: String, val text: String, val dateTime: Date): Parcelable {
+data class Journal(val id: String, val text: String, val dateTime: Date, val location: String): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
-        Date(parcel.readLong())
+        Date(parcel.readLong()),
+        parcel.readString()!!,
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
         parcel.writeString(text)
         parcel.writeLong(dateTime.time)
+        parcel.writeString(location)
     }
 
     override fun describeContents(): Int {
