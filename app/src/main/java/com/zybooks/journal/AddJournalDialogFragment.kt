@@ -147,8 +147,6 @@ class AddJournalDialogFragment: DialogFragment() {
             val currentDate = SimpleDateFormat("EEEE, MMM dd", Locale.getDefault()).format(Date())
 
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-            fusedLocationClient =
-                LocationServices.getFusedLocationProviderClient(requireActivity())
             locationImageView = view.findViewById(R.id.locationImage)
             locationTextView = view.findViewById(R.id.locationText)
 
